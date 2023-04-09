@@ -8,6 +8,7 @@ def start(graph):
   returnMsg = "Este grafo é "
   returnMsg += tipoDoGrafo(graph)
   returnMsg += arestasDoGrafo(graph)
+  returnMsg += grausDoVertice(graph)
   print(returnMsg)
 
 def validateGraph(graph):
@@ -20,6 +21,7 @@ def validateGraph(graph):
   return True
 
 def tipoDoGrafo(graph):
+
   graphType = ""
   isSymmetric = True
   isSimple = True
@@ -107,6 +109,43 @@ def arestasDoGrafo(graph):
             verticesSet += " (v"+str(rowIdx+1)+", v"+str(columnIdx+1)+")"
   return graphEdges+"Número de arestas: "+str(edgesSum)+"\n"+verticesSet+" }"
 
+def grausDoVertice(graph):
+  
+  verticesDegree = "\n\n"
+  isSymmetric = True
+  rowsSum = [0] * len(graph)
+  columnsSum = [0] * len(graph)
+
+  for rowIdx in range(len(graph)):
+    for columnIdx in range(len(graph[rowIdx])):
+      isSymmetric = isSymmetric and checkSymmetry(graph[rowIdx][columnIdx], graph[columnIdx][rowIdx])
+
+  for rowIdx in range(len(graph)):
+    for columnIdx in range(len(graph[rowIdx])):
+      rowsSum[rowIdx] += graph[rowIdx][columnIdx]
+      columnsSum[columnIdx] += graph[rowIdx][columnIdx]
+      # A ordem do loop é 2, ou seja dobra o valor
+      if hasLoop(graph, rowIdx, columnIdx) and isSymmetric:
+        rowsSum[rowIdx] += graph[rowIdx][columnIdx]
+        columnsSum[columnIdx] += graph[rowIdx][columnIdx]
+
+  # Provavelmente não-dirigido
+  if isSymmetric :
+    verticesDegree += "Lista de graus de cada vértice:"
+    for vertex in range(len(graph)):
+      verticesDegree += "\n- v"+str(vertex+1)+": "+str(rowsSum[vertex])
+    verticesDegree+= "\nSequência de Graus: "+str(rowsSum)
+  else:
+    verticesDegree += "Lista de graus de entrada de cada vértice:"
+    for vertex in range(len(graph)):
+      verticesDegree += "\n- v"+str(vertex+1)+": "+str(columnsSum[vertex])
+    verticesDegree += "\nLista de graus de saída de cada vértice:"
+    for vertex in range(len(graph)):
+      verticesDegree += "\n- v"+str(vertex+1)+": "+str(rowsSum[vertex])
+    verticesDegree+= "\nSequência de Graus de Entrada: "+str(columnsSum)
+    verticesDegree+= "\nSequência de Graus de Saída: "+str(rowsSum)
+  return verticesDegree
+
 def checkSymmetry(element, oppositeElem):
   return element == oppositeElem
 
@@ -172,14 +211,19 @@ directedGraph = [
     [0,0,0,0]]
   
 dircetedRegularGraph = [
-    [0,1,0,0],
-    [0,0,1,0],
-    [0,0,0,1],
-    [1,0,0,0]]
+    [2,1,0,0],
+    [0,2,1,0],
+    [0,0,2,1],
+    [1,0,0,2]]
 
 directedTriangle = [
     [0,0,0],
     [1,0,0],
+    [1,1,0]]
+
+triangleGraph = [
+    [0,1,1],
+    [1,0,1],
     [1,1,0]]
 
 squareGraph = [
@@ -192,7 +236,7 @@ invalidGraph1 = 0 # Teste para ver se cai resulta em grafo inválido
 invalidGraph2 = [] # Teste para ver se cai resulta em grafo inválido
 invalidGraph3 = [0] # Teste para ver se cai resulta em grafo inválido
 
-graph4 = [[1]]
+graph4 = [[0]]
 
 # Starta o prgrama
-start(directedTriangle)
+start(graph)
