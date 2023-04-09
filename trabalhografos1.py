@@ -124,7 +124,7 @@ def grausDoVertice(graph):
     for columnIdx in range(len(graph[rowIdx])):
       rowsSum[rowIdx] += graph[rowIdx][columnIdx]
       columnsSum[columnIdx] += graph[rowIdx][columnIdx]
-      # A ordem do loop é 2, ou seja dobra o valor
+      # A ordem do loop é 2 em não-dirigido, ou seja dobra o valor
       if hasLoop(graph, rowIdx, columnIdx) and isSymmetric:
         rowsSum[rowIdx] += graph[rowIdx][columnIdx]
         columnsSum[columnIdx] += graph[rowIdx][columnIdx]
